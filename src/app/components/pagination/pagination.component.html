@@ -1,0 +1,59 @@
+<div class="flex items-center justify-between border-t border-gray-200 dark:border-gray-800 pt-6 mt-8">
+  <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+    <div>
+      <p class="text-sm text-gray-700 dark:text-gray-300 font-mono">
+        Página <span class="font-bold text-gray-900 dark:text-white">{{ activeCurrentPage }}</span> de <span class="font-bold text-gray-900 dark:text-white">{{ activeTotalPages }}</span>
+      </p>
+    </div>
+    <div>
+      <nav class="relative z-0 inline-flex rounded-lg shadow-sm -space-x-px" aria-label="Pagination">
+        <!-- Prev Button -->
+        <button (click)="onPageSelect(activeCurrentPage - 1)" 
+                [disabled]="activeCurrentPage === 1"
+                class="relative inline-flex items-center px-2 py-2 rounded-l-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+          <span class="sr-only">Anterior</span>
+          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+        </button>
+        
+        <!-- Page Links from Laravel meta.links (if available) -->
+        <ng-container *ngIf="meta?.links && pageLinks.length > 0; else fallbackPages">
+          <button *ngFor="let link of pageLinks"
+                  (click)="onLinkClick(link)"
+                  [disabled]="!link.url || link.active"
+                  [ngClass]="{
+                    'bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border-red-500 dark:border-red-500': link.active,
+                    'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400': !link.active
+                  }"
+                  class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            {{ link.label }}
+          </button>
+        </ng-container>
+
+        <!-- Fallback Page Numbers (if meta.links is not present) -->
+        <ng-template #fallbackPages>
+          <button *ngFor="let page of getPagesArray()"
+                  (click)="onPageSelect(page)"
+                  [ngClass]="{
+                    'bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border-red-500 dark:border-red-500': page === activeCurrentPage,
+                    'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400': page !== activeCurrentPage
+                  }"
+                  class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-700 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            {{ page }}
+          </button>
+        </ng-template>
+
+        <!-- Next Button -->
+        <button (click)="onPageSelect(activeCurrentPage + 1)"
+                [disabled]="activeCurrentPage === activeTotalPages"
+                class="relative inline-flex items-center px-2 py-2 rounded-r-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+          <span class="sr-only">Siguiente</span>
+          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </nav>
+    </div>
+  </div>
+</div>
