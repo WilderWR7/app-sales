@@ -1,0 +1,44 @@
+<div
+  class="min-h-[calc(100vh-4rem)] bg-gray-50 dark:bg-gray-950 transition-colors duration-200 py-8 px-4 sm:px-6 lg:px-8"
+>
+  <div class="max-w-7xl mx-auto space-y-6">
+    <!-- Modular Page Header & Actions -->
+    <product-header
+      [totalItems]="totalItems()"
+      [searchControl]="searchControl"
+    ></product-header>
+
+    <!-- Error Alert -->
+    <app-error-alert [errorMessage]="errorMessage"></app-error-alert>
+
+    <product-skeleton [isLoading]="isLoading()" ></product-skeleton>
+
+    <!-- Modular Product Grid -->
+    <div
+      *ngIf="!isLoading() && hasProducts()"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-fadeIn"
+    >
+      <product-card
+        *ngFor="let product of products()"
+        [product]="product"
+      ></product-card>
+    </div>
+
+    <!-- Empty State -->
+    <product-empty-state
+      *ngIf="!isLoading() && !hasProducts()"
+      [errorMessage]="errorMessage"
+    >
+    </product-empty-state>
+
+    <!-- Modular Pagination UI -->
+    <app-pagination
+      *ngIf="!isLoading() && hasProducts() && totalPages() > 1"
+      [meta]="pagination()?.meta"
+      [currentPage]="currentPage()"
+      [totalPages]="totalPages()"
+      (pageChange)="goToPage($event)"
+    >
+    </app-pagination>
+  </div>
+</div>
