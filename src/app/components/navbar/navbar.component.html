@@ -1,19 +1,11 @@
-<nav class="navbar navbar-dark navbar-expand-lg">
-  <div class="container-md">
-    <a class="navbar-brand" routerLink="/">Prueba<span>Tecnica</span></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler"
-      aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarToggler">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item me-lg-2">
-          <a class="nav-link" routerLinkActive="active" routerLink="/inicio">Inicio</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" routerLink="/posts">Posts</a>
-        </li>
-      </ul>
+<nav class="bg-slate-900 text-white shadow-md">
+  <div class="container mx-auto px-4 flex items-center justify-between h-16">
+    <a class="text-xl font-bold tracking-tight hover:text-indigo-400 transition-colors" routerLink="/">
+      Prueba<span class="text-indigo-400">Tecnica</span>
+    </a>
+    <div class="flex items-center space-x-2">
+      <a class="px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-800 transition-colors" routerLinkActive="bg-slate-800 text-indigo-400" routerLink="/inicio">Inicio</a>
+      <a class="px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-800 transition-colors" routerLinkActive="bg-slate-800 text-indigo-400" routerLink="/posts">Posts</a>
     </div>
   </div>
-</nav>
+</nav>
