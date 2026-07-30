@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Meta, Link } from '../../core/models/product.model';
+import { Link, Meta } from 'src/app/core/models/paginate.model';
 
 @Component({
   selector: 'app-pagination',
