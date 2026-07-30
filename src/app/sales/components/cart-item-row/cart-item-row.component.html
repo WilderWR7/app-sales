@@ -1,0 +1,76 @@
+<div class="flex items-center justify-between p-4 rounded-2xl border transition-all shadow-sm"
+     [ngClass]="{
+       'border-red-500 bg-red-50/40 dark:bg-red-950/20': isExceedingStock,
+       'bg-gray-50 dark:bg-gray-800/60 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600': !isExceedingStock
+     }">
+  <!-- Item info + Image Thumbnail -->
+  <div class="flex items-center space-x-3.5 flex-1 min-w-0 pr-3">
+    <!-- Product Thumbnail -->
+    <div class="w-12 h-12 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 overflow-hidden flex-shrink-0 flex items-center justify-center shadow-inner">
+      <img *ngIf="item.product.image || item.product.image_url" 
+           [src]="item.product.image || item.product.image_url" 
+           [alt]="item.product.name" 
+           class="w-full h-full object-cover" />
+      <svg *ngIf="!item.product.image && !item.product.image_url" class="w-6 h-6 text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+      </svg>
+    </div>
+
+    <!-- Title & Stock Info -->
+    <div class="min-w-0 flex-1">
+      <h4 class="text-sm font-bold text-gray-900 dark:text-white truncate" [title]="item.product.name">
+        {{ item.product.name }}
+      </h4>
+      <p class="text-xs text-gray-500 dark:text-gray-400 font-mono mt-0.5">
+        ${{ item.product.price }} c/u • <span [class.text-red-500]="isExceedingStock" [class.font-bold]="isExceedingStock">Stock: {{ item.product.stock }}</span>
+      </p>
+      <!-- Exceeded stock warning badge -->
+      <p *ngIf="isExceedingStock" class="text-[11px] font-bold text-red-600 dark:text-red-400 mt-1 animate-pulse flex items-center">
+        <svg class="w-3.5 h-3.5 mr-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+        Supera el stock (Máx: {{ item.product.stock }})
+      </p>
+    </div>
+  </div>
+
+  <!-- Direct Numeric Input Only -->
+  <div class="flex items-center space-x-3">
+    <div class="relative">
+      <input type="number" 
+             [value]="item.quantity" 
+             (change)="onQuantityChange($event)"
+             (blur)="onQuantityChange($event)"
+             (keyup.enter)="onQuantityChange($event)"
+             min="1" 
+             class="w-20 text-center py-1.5 px-2 bg-white dark:bg-gray-900 text-sm font-bold border rounded-lg focus:outline-none font-mono shadow-inner transition-colors"
+             [class.border-red-500]="isExceedingStock"
+             [class.text-red-600]="isExceedingStock"
+             [class.dark:text-red-400]="isExceedingStock"
+             [class.focus:ring-red-500]="isExceedingStock"
+             [class.border-gray-300]="!isExceedingStock"
+             [class.dark:border-gray-700]="!isExceedingStock"
+             [class.text-gray-900]="!isExceedingStock"
+             [class.dark:text-white]="!isExceedingStock"
+             title="Cantidad a comprar" />
+    </div>
+
+    <!-- Subtotal -->
+    <div class="text-right font-bold text-sm font-mono w-16"
+         [class.text-red-600]="isExceedingStock"
+         [class.text-gray-900]="!isExceedingStock"
+         [class.dark:text-white]="!isExceedingStock">
+      ${{ item.subtotal.toFixed(2) }}
+    </div>
+
+    <!-- Remove Item Button -->
+    <button (click)="remove()" 
+            type="button" 
+            class="p-1 text-gray-400 hover:text-red-600 dark:hover:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+            title="Eliminar ítem">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+      </svg>
+    </button>
+  </div>
+</div>

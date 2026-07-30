@@ -1,0 +1,36 @@
+<div *ngIf="response" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
+  <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-6 text-center transform scale-100 transition-all">
+    <!-- Success Icon -->
+    <div class="w-16 h-16 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center mx-auto shadow-inner">
+      <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+      </svg>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-black text-gray-900 dark:text-white">¡Venta Procesada con Éxito!</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+        La transacción fue registrada correctamente y el inventario ha sido actualizado.
+      </p>
+    </div>
+
+    <!-- Ticket details box -->
+    <div class="bg-gray-50 dark:bg-gray-800/60 rounded-2xl p-4 border border-gray-200 dark:border-gray-700/60 text-left space-y-2 font-mono text-sm">
+      <div class="flex justify-between">
+        <span class="text-gray-500 dark:text-gray-400">ID de Venta:</span>
+        <span class="font-bold text-gray-900 dark:text-white">#{{ response.sale_id }}</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-gray-500 dark:text-gray-400">Monto Total:</span>
+        <span class="font-bold text-emerald-600 dark:text-emerald-400">${{ response.total.toFixed(2) }}</span>
+      </div>
+    </div>
+
+    <!-- Action button -->
+    <button (click)="onClose()"
+            type="button"
+            class="w-full py-3.5 px-4 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-base shadow-lg shadow-red-600/30 transition-all">
+      Nueva Venta
+    </button>
+  </div>
+</div>
