@@ -1,3 +1,4 @@
+import { PaginatedResponse } from 'src/app/core/models/paginate.model';
 import { Product } from '../../core/models/product.model';
 
 export interface CartItem {
@@ -21,3 +22,21 @@ export interface CreateSaleResponse {
   total: number;
   created_at?: string;
 }
+
+export interface SaleDetail {
+  quantity: number;
+  subtotal?: number;
+  product: Product;
+}
+
+export interface Sale {
+  id: number;
+  total: number;
+  created_at: string;
+  user: {
+    name: string;
+  };
+  details?: SaleDetail[];
+}
+
+export interface PaginatedSalesResponse extends PaginatedResponse<Sale> {}

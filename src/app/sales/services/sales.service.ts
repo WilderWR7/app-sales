@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { SalePayload, CreateSaleResponse } from '../models/sale.model';
+import { SalePayload, CreateSaleResponse, PaginatedSalesResponse } from '../models/sale.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,5 +16,23 @@ export class SalesService {
    */
   createSale(payload: SalePayload): Observable<CreateSaleResponse> {
     return this.httpClient.post<CreateSaleResponse>(this.apiUrl, payload);
+  }
+
+  /**
+   * Get all sales with pagination
+   */
+  getSales(page: number = 1, perPage: number = 10): Observable<PaginatedSalesResponse> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('per_page', perPage.toString());
+
+    return this.httpClient.get<PaginatedSalesResponse>(this.apiUrl, { params });
+  }
+
+  /**
+   * Delete a sale
+   */
+  deleteSale(saleId: number): Observable<{ message: string }> {
+    return this.httpClient.delete<{ message: string }>(`${this.apiUrl}/${saleId}`);
   }
 }
