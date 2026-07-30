@@ -42,3 +42,20 @@
     </app-pagination>
   </div>
 </div>
+
+<!-- Floating Cart Toggle Button -->
+<button (click)="cartStore.toggleDrawer()"
+        type="button"
+        class="fixed bottom-6 right-6 z-30 p-4 bg-red-600 hover:bg-red-700 text-white rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center space-x-2 group"
+        title="Ver Carrito">
+  <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+  </svg>
+  <span *ngIf="cartStore.totalCount() > 0" 
+        class="absolute -top-1 -right-1 px-2 py-0.5 bg-white text-red-600 font-extrabold text-xs rounded-full border-2 border-red-600 shadow">
+    {{ cartStore.totalCount() }}
+  </span>
+</button>
+
+<!-- Slide-Over Cart Drawer -->
+<app-cart-drawer (saleCompleted)="loadProducts()"></app-cart-drawer>
