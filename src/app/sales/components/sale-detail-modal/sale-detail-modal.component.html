@@ -77,10 +77,25 @@
         <tbody class="divide-y divide-gray-100 dark:divide-gray-800/60 text-sm">
           <tr
             *ngFor="let item of items"
-            class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30"
+            class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-colors"
           >
             <td class="py-3 px-4 font-medium text-gray-900 dark:text-white">
-              {{ item.product.name }}
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 overflow-hidden flex-shrink-0 flex items-center justify-center shadow-xs"
+                >
+                  <img
+                    [src]="item.product.image"
+                    [alt]="item.product.name"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <div>
+                  <span class="font-bold text-gray-900 dark:text-white block">{{
+                    item.product.name
+                  }}</span>
+                </div>
+              </div>
             </td>
             <td
               class="py-3 px-4 text-center font-mono font-bold text-gray-700 dark:text-gray-300"
@@ -97,7 +112,8 @@
             >
               ${{
                 (
-                  item.subtotal || item.quantity * (item.product.price || 0)
+                  item.subtotal ||
+                  item.quantity * (item.product.price || 0)
                 ).toFixed(2)
               }}
             </td>
