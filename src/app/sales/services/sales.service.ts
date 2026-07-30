@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { SalePayload, CreateSaleResponse, PaginatedSalesResponse } from '../models/sale.model';
+import { SalePayload, CreateSaleResponse, PaginatedSalesResponse, SalesSummary } from '../models/sale.model';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +27,13 @@ export class SalesService {
       .set('per_page', perPage.toString());
 
     return this.httpClient.get<PaginatedSalesResponse>(this.apiUrl, { params });
+  }
+
+  /**
+   * Get sales summary metrics & KPIs
+   */
+  getSalesSummary(): Observable<SalesSummary> {
+    return this.httpClient.get<SalesSummary>(`${this.apiUrl}/summary`);
   }
 
   /**
