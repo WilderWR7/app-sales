@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SalesService } from '../services/sales.service';
-import { Sale, PaginatedSalesResponse } from '../models/sale.model';
+import { Sale, PaginatedSalesResponse, SalesSummary } from '../models/sale.model';
 import { SalesTableHeaderComponent } from '../components/sales-table-header/sales-table-header.component';
 import { SalesTableComponent } from '../components/sales-table/sales-table.component';
 import { SaleDetailModalComponent } from '../components/sale-detail-modal/sale-detail-modal.component';
@@ -27,7 +27,10 @@ export class SalesHistoryPageComponent implements OnInit {
   // State Signals
   sales = signal<Sale[]>([]);
   pagination = signal<PaginatedSalesResponse | null>(null);
+  summary = signal<SalesSummary | null>(null);
+
   isLoading = signal<boolean>(false);
+  isLoadingSummary = signal<boolean>(false);
   errorMessage = signal<string | null>(null);
   successMessage = signal<string | null>(null);
 
@@ -53,6 +56,7 @@ export class SalesHistoryPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadSales();
+    this.loadSummary();
   }
 
   loadSales(): void {
@@ -71,6 +75,21 @@ export class SalesHistoryPageComponent implements OnInit {
       error: (err: any) => {
         this.errorMessage.set('Error al cargar el historial de ventas.');
         this.isLoading.set(false);
+      }
+    });
+  }
+
+  loadSummary(): void {
+    this.isLoadingSummary.set(true);
+
+    this.salesService.getSalesSummary().subscribe({
+      next: (summaryData) => {
+        this.summary.set(summaryData);
+        this.isLoadingSummary.set(false);
+      },
+      error: (err) => {
+        console.error('Error loading sales summary metrics', err);
+        this.isLoadingSummary.set(false);
       }
     });
   }
@@ -111,6 +130,7 @@ export class SalesHistoryPageComponent implements OnInit {
         this.selectedSaleForDelete.set(null);
         this.successMessage.set(`La Venta #${sale.id} fue anulada y el stock fue restituido al inventario.`);
         this.loadSales();
+        this.loadSummary();
         
         setTimeout(() => this.successMessage.set(null), 5000);
       },
