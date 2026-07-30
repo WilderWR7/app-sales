@@ -1,6 +1,6 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap, catchError, of, throwError } from 'rxjs';
+import { Observable, tap, catchError, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { User, AuthResponse, LoginPayload, RegisterPayload } from '../models/auth.model';
 
@@ -10,23 +10,38 @@ import { User, AuthResponse, LoginPayload, RegisterPayload } from '../models/aut
 export class AuthService {
   private httpClient = inject(HttpClient);
   private tokenKey = 'auth_token';
+  private userKey = 'auth_user';
 
   readonly currentUser = signal<User | null>(null);
-  readonly isAuthenticated = computed(() => !!this.currentUser());
+  readonly isAuthenticated = computed(() => !!this.currentUser() || !!this.getToken());
 
   constructor() {
     this.initAuth();
   }
 
   /**
-   * Initializes the session if a token exists in localStorage.
+   * Synchronously restores the session from localStorage on page reload.
+   * 
    */
   private initAuth(): void {
     const token = this.getToken();
+    const savedUser = localStorage.getItem(this.userKey);
+
+    if (savedUser) {
+      try {
+        this.currentUser.set(JSON.parse(savedUser));
+      } catch (e) {
+        console.error('Error parsing stored user data', e);
+      }
+    }
+
     if (token) {
+      // Re-validates user
       this.getUser().subscribe({
-        error: () => {
-          this.clearSession();
+        error: (err) => {
+          if (err?.status === 401) {
+            this.clearSession();
+          }
         }
       });
     }
@@ -42,8 +57,12 @@ export class AuthService {
   /**
    * Store token in localStorage
    */
-  private setToken(token: string): void {
+  private setSession(token: string, user?: User): void {
     localStorage.setItem(this.tokenKey, token);
+    if (user) {
+      localStorage.setItem(this.userKey, JSON.stringify(user));
+      this.currentUser.set(user);
+    }
   }
 
   /**
@@ -52,12 +71,8 @@ export class AuthService {
   login(payload: LoginPayload): Observable<AuthResponse> {
     return this.httpClient.post<AuthResponse>(`${environment.apiUrl}/login`, payload).pipe(
       tap((res) => {
-        const token = res.access_token;
-        if (token) {
-          this.setToken(token);
-        }
-        if (res.user) {
-          this.currentUser.set(res.user);
+        if (res.access_token) {
+          this.setSession(res.access_token, res.user);
         }
       })
     );
@@ -70,10 +85,7 @@ export class AuthService {
     return this.httpClient.post<AuthResponse>(`${environment.apiUrl}/register`, payload).pipe(
       tap((res) => {
         if (res.access_token) {
-          this.setToken(res.access_token);
-        }
-        if (res.user) {
-          this.currentUser.set(res.user);
+          this.setSession(res.access_token, res.user);
         }
       })
     );
@@ -86,6 +98,7 @@ export class AuthService {
     return this.httpClient.get<User>(`${environment.apiUrl}/user`).pipe(
       tap((user) => {
         this.currentUser.set(user);
+        localStorage.setItem(this.userKey, JSON.stringify(user));
       })
     );
   }
@@ -96,7 +109,7 @@ export class AuthService {
   logout(): Observable<any> {
     return this.httpClient.post(`${environment.apiUrl}/logout`, {}).pipe(
       tap(() => this.clearSession()),
-      catchError((err) => {
+      catchError(() => {
         this.clearSession();
         return of(null);
       })
@@ -108,6 +121,7 @@ export class AuthService {
    */
   clearSession(): void {
     localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.userKey);
     this.currentUser.set(null);
   }
 }
