@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://wilder.alwaysdata.net/api'
+  apiUrl: 'https://wilder.alwaysdata.net/api'
 };
