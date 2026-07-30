@@ -40,3 +40,19 @@ export interface Sale {
 }
 
 export interface PaginatedSalesResponse extends PaginatedResponse<Sale> {}
+
+export interface TopProductSummary {
+  name: string | null;
+  total_quantity: number;
+}
+
+export interface SalesSummary {
+  total_revenue: number;
+  total_sales_count: number;
+  average_ticket: number;
+  total_items_sold: number;
+  today_revenue: number;
+  cancelled_sales_count: number;
+  cancelled_revenue: number;
+  top_product?: TopProductSummary | null;
+}
