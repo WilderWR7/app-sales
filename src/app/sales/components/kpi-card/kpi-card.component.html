@@ -1,0 +1,24 @@
+<div class="p-4 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm relative overflow-hidden group transition-colors"
+     [ngClass]="hoverBorderClass">
+  <div class="flex items-center justify-between">
+    <span class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">{{ title }}</span>
+    <div class="p-2 rounded-xl" [ngClass]="iconColorClass">
+      <ng-content select="[icon]"></ng-content>
+    </div>
+  </div>
+
+  <div class="mt-3">
+    <!-- Skeleton loader -->
+    <div *ngIf="isLoading" class="h-7 w-28 bg-gray-200 dark:bg-gray-800 rounded animate-pulse"></div>
+
+    <!-- Value & Subtitle -->
+    <ng-container *ngIf="!isLoading">
+      <div class="text-xl font-black font-mono truncate" [ngClass]="valueColorClass" [title]="value">
+        {{ value }}
+      </div>
+      <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-1 font-mono">
+        {{ subtitle }}
+      </p>
+    </ng-container>
+  </div>
+</div>
