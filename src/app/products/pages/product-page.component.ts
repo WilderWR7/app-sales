@@ -47,7 +47,7 @@ export class ProductPageComponent implements OnInit {
   // Controls
   searchControl = new FormControl('');
   currentPage = signal<number>(1);
-  perPage = 10;
+  perPage = 12;
 
   // Computed state
   hasProducts = computed(() => this.products().length > 0);
