@@ -15,6 +15,8 @@ import { PaginationComponent } from '../../components/pagination/pagination.comp
 import { ProductSkeletonComponent } from '../components/product-skeleton/product-skeleton.component';
 import { ErrorAlert } from '../../components/error-alert/error-alert.component';
 import { ProductEmptyStateComponent } from '../components/product-empty-state/product-empty-state.component';
+import { CartDrawerComponent } from '../../components/cart-drawer/cart-drawer.component';
+import { CartStore } from '../../core/state/cart.store';
 
 @Component({
   selector: 'app-product-page',
@@ -28,11 +30,13 @@ import { ProductEmptyStateComponent } from '../components/product-empty-state/pr
     ProductSkeletonComponent,
     ErrorAlert,
     ProductEmptyStateComponent,
+    CartDrawerComponent
   ],
   templateUrl: './product-page.component.html',
 })
 export class ProductPageComponent implements OnInit {
   private productService = inject(ProductService);
+  cartStore = inject(CartStore);
 
   // State Signals
   products = signal<Product[]>([]);
